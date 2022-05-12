@@ -1,0 +1,29 @@
+version: '3'
+services:
+  mongo:
+    image: 'mongo'
+    container_name: 'bees-db'
+    restart: 'always'
+    ports:
+      - '27018:27017'
+    networks:
+      - esnet
+  finlit:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./src:/app/src
+    container_name: 'beeSys-backend'
+    restart: 'always'
+    links:
+      - mongo
+    depends_on:
+      - 'mongo'
+    ports:
+      - '3000:3000'
+    networks:
+      - esnet
+
+networks:
+  esnet:
